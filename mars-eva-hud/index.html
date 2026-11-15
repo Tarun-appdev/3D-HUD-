@@ -264,7 +264,7 @@ function frame(){
   }
   if(S.tgt){const dx=S.tgt.x-S.pos.x,dy=S.tgt.y-S.pos.y,d=Math.hypot(dx,dy),mx=2.2/60;if(d<=mx){S.pos={x:S.tgt.x,y:S.tgt.y};S.tgt=null}else S.pos={x:S.pos.x+dx/d*mx,y:S.pos.y+dy/d*mx}}
   if(S.mission){const w=S.mission.waypoints[S.ptr];if(w&&Math.hypot(w.x-S.pos.x,w.y-S.pos.y)<6&&S.ptr<S.mission.waypoints.length-1){S.ptr++;toast('Waypoint reached. Next: '+S.mission.waypoints[S.ptr].name)}}
-  CB=basis();g.clearRect(0,0,W,H);
+  CB=basis();if(window.hudTerrain)window.hudTerrain.render(S.pos,CB);g.clearRect(0,0,W,H);
   if(S.vr){view(0,W/2,-.032);view(W/2,W/2,.032)}else view(0,W,0);
   requestAnimationFrame(frame);
 }
