@@ -12,7 +12,7 @@
 :root{--line:#3df2c8;--warn:#ff5a36;--ink:#ffe9d0;--dim:#b87a5a;--bg:#1a0c08}
 *{box-sizing:border-box;margin:0}
 html,body{height:100%;background:var(--bg);overflow:hidden;font-family:Bahnschrift,"DIN Alternate","Arial Narrow",sans-serif;color:var(--ink);touch-action:none}
-canvas{position:fixed;inset:0;width:100%;height:100%}
+canvas{position:fixed;inset:0;width:100%;height:100%}#c{z-index:1}
 video{display:none}
 #bar{position:fixed;right:max(10px,env(safe-area-inset-right));top:max(10px,env(safe-area-inset-top));display:flex;gap:6px;z-index:5}
 button,input{font:inherit;color:var(--ink);background:rgba(26,12,8,.8);border:1px solid var(--dim);border-radius:6px;padding:8px 11px}
@@ -251,7 +251,7 @@ function view(x,w,shift){
   g.save();g.beginPath();g.rect(x,0,w,H);g.clip();
   if(S.cam&&vid.readyState>1){const vr=vid.videoWidth/vid.videoHeight,sc=Math.max(w/vid.videoWidth,H/vid.videoHeight);
     g.drawImage(vid,x+(w-vid.videoWidth*sc)/2,(H-vid.videoHeight*sc)/2,vid.videoWidth*sc,vid.videoHeight*sc);g.fillStyle='rgba(26,12,8,.25)';g.fillRect(x,0,w,H)}
-  else{const gr=g.createLinearGradient(0,0,0,H);gr.addColorStop(0,'#2b1410');gr.addColorStop(.5,'#6a3320');gr.addColorStop(1,'#1a0c08');g.fillStyle=gr;g.fillRect(x,0,w,H)}
+  else{g.clearRect(x,0,w,H)}
   if(S.mission){drawWorld()}
   drawHUD();g.restore();
 }
@@ -325,4 +325,15 @@ if(!$('host').value&&/^[\d.]+$|^localhost$/.test(location.hostname)&&location.po
 // offline cache so the app and last mission still work away from base Wi-Fi
 if('serviceWorker' in navigator&&location.protocol!=='file:')navigator.serviceWorker.register('sw.js').catch(()=>{});
 requestAnimationFrame(frame);
-</script></body></html>
+</script>
+<script type="module">
+import { startHudTerrain } from './hud-terrain.js';
+
+try {
+  window.hudTerrain = await startHudTerrain();
+  console.log('Jezero 3D terrain connected to Mars EVA HUD.');
+} catch (error) {
+  console.error('Could not start Jezero terrain:', error);
+}
+</script>
+</body></html>
